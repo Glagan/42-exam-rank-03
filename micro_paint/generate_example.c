@@ -6,7 +6,7 @@
 /*   By: ncolomer <ncolomer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 13:09:44 by ncolomer          #+#    #+#             */
-/*   Updated: 2019/11/22 18:14:09 by ncolomer         ###   ########.fr       */
+/*   Updated: 2019/11/22 19:17:56 by ncolomer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ int
 		type = rand_int_range(0, 10000);
 		if (type == 10000 || type == 0)
 			type = 'a';
-		else if (type >= 50)
-			type = MODE[0];
+		else if (type >= 5000)
+			type = 'r';
 		else
-			type = MODE[1];
+			type = 'R';
 		color = rand_int_range((FULL_ASCII) ? 0 : 32, (FULL_ASCII) ? 255 : 126);
 		if ((size = rand_int_range(0, 100)) >= 50)
 		{
