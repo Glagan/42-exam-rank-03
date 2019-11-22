@@ -12,10 +12,10 @@ typedef struct	s_zone
 typedef struct	s_shape
 {
 	char	type;
-	float	x;
-	float	y;
-	float	width;
-	float	height;
+	double	x;
+	double	y;
+	double	width;
+	double	height;
 	char	color;
 	struct s_shape	*next;
 }				t_shape;
@@ -32,21 +32,32 @@ int
 }
 
 int
-	ft_floor(float val)
+	ft_floor(double val)
 {
 	return ((int)val);
 }
 
 int
-	ft_ceil(float val)
+	ft_ceil(double val)
 {
-	int	abs;
+	int	att;
 
-	abs = (int)val;
-	if (val - abs > 0)
-		return ((int)((float)1. + (float)val));
-	return (abs);
+	att = (int)val;
+	if (val - att > 0)
+		return ((int)((double)1. + (double)val));
+	return (att);
 }
+
+/*int
+	ft_round(double val)
+{
+	int	att;
+
+	att = (int)val;
+	if (val - att >= 0.5)
+		return (ft_ceil(val));
+	return (att);
+}*/
 
 int
 	str_error(char const *str, int ret)
@@ -93,14 +104,13 @@ int
 	check_zone(t_zone *zone)
 {
 	return (zone->width > 0 && zone->width <= 300
-			&& zone->height > 0 && zone->height <= 300
-			/*&& (unsigned char)zone->background >= 0*/);
+			&& zone->height > 0 && zone->height <= 300);
 }
 
 int
 	check_shape(t_shape *shape)
 {
-	return (shape->width > 0 && shape->height > 0 /*&& (unsigned char)shape->color >= 0*/
+	return (shape->width > 0 && shape->height > 0
 			&& (shape->type == 'r' || shape->type == 'R')
 			&& shape->color != ' ');
 }
@@ -123,7 +133,7 @@ int
 		return (0);
 	if (scan_ret == -1)
 		return (0);
-	while ((scan_ret = fscanf(file, "%c %f %f %f %f %c\n", &tmp->type, &tmp->x, &tmp->y, &tmp->width, &tmp->height, &tmp->color)) == 6)
+	while ((scan_ret = fscanf(file, "%c %lf %lf %lf %lf %c\n", &tmp->type, &tmp->x, &tmp->y, &tmp->width, &tmp->height, &tmp->color)) == 6)
 	{
 		if (!*shapes)
 			first = tmp;
@@ -203,9 +213,8 @@ void
 	i = 0;
 	while (i < zone->height)
 	{
-		printf("%.*s\n", zone->width, drawing + (i * zone->width));
-		/*write(1, drawing + (i * zone->width), zone->width);
-		write(1, "\n", 1);*/
+		write(1, drawing + (i * zone->width), zone->width);
+		write(1, "\n", 1);
 		i++;
 	}
 }
