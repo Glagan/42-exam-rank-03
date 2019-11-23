@@ -143,24 +143,14 @@ int
 	return (1);
 }
 
-char
-	*new_drawing(t_zone *zone)
+void
+	set_drawing(char *drawing[900], t_zone *zone)
 {
-	char	*drawing;
-	int		i;
-	int		j;
+	int	i;
 
-	if (!(drawing = (char*)malloc(sizeof(*drawing) * (zone->width * zone->height))))
-		return (NULL);
 	i = 0;
-	while (i < zone->height)
-	{
-		j = 0;
-		while (j < zone->width)
-			drawing[(i * zone->width) + j++] = zone->background;
-		i++;
-	}
-	return (drawing);
+	while (i < 900)
+		drawing[i++] = zone->background;
 }
 
 void
@@ -216,7 +206,7 @@ int
 {
 	t_zone	zone;
 	t_shape	*shapes;
-	char	*drawing;
+	char	drawing[900];
 	t_shape	*tmp;
 	FILE	*file;
 
@@ -224,15 +214,13 @@ int
 	zone.height = 0;
 	zone.background = 0;
 	shapes = NULL;
-	drawing = NULL;
 	if (argc != 2)
 		return (str_error("Error: argument\n", 1));
 	if (!(file = fopen(argv[1], "r")))
 		return (str_error("Error: Operation file corrupted\n", 1));
 	if (!parse_file(file, &zone, &shapes))
 		return (clear_all(file, &shapes, drawing) && str_error("Error: Operation file corrupted\n", 1));
-	if (!(drawing = new_drawing(&zone)))
-		return (clear_all(file, &shapes, drawing) && str_error("Error: malloc failed :)\n", 1));
+	set_drawing(&drawing, &zone);
 	while (shapes)
 	{
 		draw_shape(drawing, shapes, &zone);
