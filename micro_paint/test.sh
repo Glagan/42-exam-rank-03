@@ -3,7 +3,7 @@ echo "> start"
 echo "$ compile"
 rm -f micro_paint gen
 gcc -Wall -Wextra -Werror micro_paint.c -o micro_paint
-gcc -Wall -Wextra -Werror generate_example.c -o gen
+g++ -Wall -Wextra -Werror generate_example.cpp -o gen
 echo "$ test"
 counter=1
 max=2

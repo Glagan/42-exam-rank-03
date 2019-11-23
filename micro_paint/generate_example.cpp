@@ -1,32 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   generate_example.c                                 :+:      :+:    :+:   */
+/*   generate_example.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncolomer <ncolomer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 13:09:44 by ncolomer          #+#    #+#             */
-/*   Updated: 2019/11/23 16:10:17 by ncolomer         ###   ########.fr       */
+/*   Updated: 2019/11/23 16:26:17 by ncolomer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <random>
 
 # define FULL_ASCII 0
+# define ASCII_RANGE (FULL_ASCII) ? 1 : 32, (FULL_ASCII) ? 255 : 126
 # define MODE "rR" // -> "cC"
 
 int
-	rand_int_range(int min, int max)
+	rand_int_range(int min, int max, std::mt19937 &rng)
 {
-	return (rand() % (max + 1 - min) + min);
+	return (std::uniform_int_distribution<int>(min, max)(rng));
 }
 
 float
-	rand_float_range(float min, float max)
+	rand_float_range(float min, float max, std::mt19937 &rng)
 {
-    return (min + (rand() / (float)(RAND_MAX / (float)(max - min))));
+    return (std::uniform_int_distribution<float>(min, max)(rng));
 }
 
 int
@@ -39,42 +41,42 @@ int
 	float	x, y, swidth, sheight;
 	int		size;
 
-	srand(time(NULL));
+	std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
 	if (!(file = fopen("example_", "w")))
 		return (printf("file: fopen error.\n"));
-	width = rand_int_range(-1, 301);
-	height = rand_int_range(-1, 301);
-	background = rand_int_range((FULL_ASCII) ? 1 : 32, (FULL_ASCII) ? 255 : 126);
+	width = rand_int_range(-1, 301, rng);
+	height = rand_int_range(-1, 301, rng);
+	background = rand_int_range(ASCII_RANGE, rng);
 	if (fprintf(file, "%d %d %c\n", width, height, background) < 0)
 		return (fclose(file) && printf("file: fprintf error.\n"));
 
-	nbr_shapes = rand_int_range(-2, 42+42);
+	nbr_shapes = rand_int_range(-2, 42+42, rng);
 	i = 0;
 	while (i < nbr_shapes)
 	{
-		type = rand_int_range(0, 10000);
+		type = rand_int_range(0, 10000, rng);
 		if (type == 10000 || type == 0)
 			type = 'a';
 		else if (type >= 5000)
 			type = 'r';
 		else
 			type = 'R';
-		color = rand_int_range((FULL_ASCII) ? 1 : 32, (FULL_ASCII) ? 255 : 126);
-		if ((size = rand_int_range(0, 100)) >= 25)
+		color = rand_int_range(ASCII_RANGE, rng);
+		if ((size = rand_int_range(0, 100, rng)) >= 25)
 		{
-			x = rand_float_range(.001, (float)size);
-			y = rand_float_range(.001, (float)size);
-			swidth = rand_float_range(.001, (float)size);
-			sheight = rand_float_range(.001, (float)size);
+			x = rand_float_range(.001, (float)size, rng);
+			y = rand_float_range(.001, (float)size, rng);
+			swidth = rand_float_range(.001, (float)size, rng);
+			sheight = rand_float_range(.001, (float)size, rng);
 		}
 		else
 		{
-			x = rand_float_range(-100., 400.);
-			y = rand_float_range(-100., 400.);
-			swidth = rand_float_range(-.01, 400.);
-			sheight = rand_float_range(-.01, 400.);
+			x = rand_float_range(-100., 400., rng);
+			y = rand_float_range(-100., 400., rng);
+			swidth = rand_float_range(-1, 400., rng);
+			sheight = rand_float_range(-1, 400., rng);
 		}
-		if (rand_int_range(0, 100) >= 35)
+		if (rand_int_range(0, 100, rng) >= 35)
 			size = fprintf(file, (++i == nbr_shapes) ? "%c %f %f %f %f %c" : "%c %f %f %f %f %c\n", type, x, y, swidth, sheight, color);
 		else
 			size = fprintf(file, (++i == nbr_shapes) ? "%c %d %d %d %d %c" : "%c %d %d %d %d %c\n", type, (int)x, (int)y, (int)swidth, (int)sheight, color);
