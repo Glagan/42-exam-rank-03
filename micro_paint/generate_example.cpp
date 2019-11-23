@@ -6,7 +6,7 @@
 /*   By: ncolomer <ncolomer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 13:09:44 by ncolomer          #+#    #+#             */
-/*   Updated: 2019/11/23 16:26:17 by ncolomer         ###   ########.fr       */
+/*   Updated: 2019/11/23 16:29:24 by ncolomer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int
 float
 	rand_float_range(float min, float max, std::mt19937 &rng)
 {
-    return (std::uniform_int_distribution<float>(min, max)(rng));
+    return (std::uniform_real_distribution<float>(min, max)(rng));
 }
 
 int
@@ -73,8 +73,8 @@ int
 		{
 			x = rand_float_range(-100., 400., rng);
 			y = rand_float_range(-100., 400., rng);
-			swidth = rand_float_range(-1, 400., rng);
-			sheight = rand_float_range(-1, 400., rng);
+			swidth = rand_float_range(-.90, 400., rng);
+			sheight = rand_float_range(-.90, 400., rng);
 		}
 		if (rand_int_range(0, 100, rng) >= 35)
 			size = fprintf(file, (++i == nbr_shapes) ? "%c %f %f %f %f %c" : "%c %f %f %f %f %c\n", type, x, y, swidth, sheight, color);
