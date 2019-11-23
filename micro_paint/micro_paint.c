@@ -56,37 +56,10 @@ int
 }
 
 int
-	clear_all(FILE *file, t_shape **shapes, char *drawing)
+	clear_all(FILE *file)
 {
-	t_shape	*tmp;
-
 	fclose(file);
-	while (shapes && *shapes)
-	{
-		tmp = (*shapes)->next;
-		free(*shapes);
-		*shapes = tmp;
-	}
-	if (drawing)
-		free(drawing);
 	return (1);
-}
-
-t_shape
-	*new_shape(void)
-{
-	t_shape	*new;
-
-	if (!(new = (t_shape*)malloc(sizeof(*new))))
-		return (NULL);
-	new->type = 0;
-	new->x = 0.;
-	new->y = 0.;
-	new->width = 0.;
-	new->height = 0.;
-	new->color = 0;
-	new->next = 0;
-	return (new);
 }
 
 int
@@ -105,46 +78,21 @@ int
 }
 
 int
-	parse_file(FILE *file, t_zone *zone, t_shape **shapes)
+	get_zone(FILE *file, t_zone *zone)
 {
-	t_shape	*tmp;
-	int		total;
-	t_shape	*first;
-	int		scan_ret;
+	int scan_ret;
 
-	first = NULL;
-	total = 0;
-	if (!(tmp = new_shape()))
-		return (0);
 	if ((scan_ret = fscanf(file, "%d %d %c\n", &zone->width, &zone->height, &zone->background)) != 3)
 		return (0);
 	if (!check_zone(zone))
 		return (0);
 	if (scan_ret == -1)
 		return (0);
-	while ((scan_ret = fscanf(file, "%c %lf %lf %lf %lf %c\n", &tmp->type, &tmp->x, &tmp->y, &tmp->width, &tmp->height, &tmp->color)) == 6)
-	{
-		if (!*shapes)
-			first = tmp;
-		else
-			(*shapes)->next = tmp;
-		*shapes = tmp;
-		if (!check_shape(tmp))
-			return (0);
-		if (!(tmp = new_shape()))
-			return (0);
-		total++;
-	}
-	if (total > 1)
-		free(tmp);
-	if (scan_ret != -1)
-		return (0);
-	*shapes = first;
 	return (1);
 }
 
 void
-	set_drawing(char *drawing[900], t_zone *zone)
+	paint_background(char drawing[900], t_zone *zone)
 {
 	int	i;
 
@@ -153,8 +101,25 @@ void
 		drawing[i++] = zone->background;
 }
 
+int
+	draw_shapes(FILE *file, char drawing[900], t_zone *zone)
+{
+	t_shape	tmp;
+	int		scan_ret;
+
+	while ((scan_ret = fscanf(file, "%c %lf %lf %lf %lf %c\n", &tmp->type, &tmp->x, &tmp->y, &tmp->width, &tmp->height, &tmp->color)) == 6)
+	{
+		if (!check_shape(tmp))
+			return (0);
+		draw_shape(drawing, &tmp, zone);
+	}
+	if (scan_ret != -1)
+		return (0);
+	return (1);
+}
+
 void
-	draw_shape(char *drawing, t_shape *shape, t_zone *zone)
+	draw_shape(char drawing[900], t_shape *shape, t_zone *zone)
 {
 	int	i;
 	int	j;
@@ -188,7 +153,7 @@ void
 }
 
 void
-	draw_drawing(char *drawing, t_zone *zone)
+	draw_drawing(char drawing[900], t_zone *zone)
 {
 	int	i;
 
@@ -205,9 +170,7 @@ int
 	main(int argc, char **argv)
 {
 	t_zone	zone;
-	t_shape	*shapes;
 	char	drawing[900];
-	t_shape	*tmp;
 	FILE	*file;
 
 	zone.width = 0;
@@ -218,17 +181,12 @@ int
 		return (str_error("Error: argument\n", 1));
 	if (!(file = fopen(argv[1], "r")))
 		return (str_error("Error: Operation file corrupted\n", 1));
-	if (!parse_file(file, &zone, &shapes))
-		return (clear_all(file, &shapes, drawing) && str_error("Error: Operation file corrupted\n", 1));
-	set_drawing(&drawing, &zone);
-	while (shapes)
-	{
-		draw_shape(drawing, shapes, &zone);
-		tmp = shapes->next;
-		free(shapes);
-		shapes = tmp;
-	}
+	if (!get_zone(file, &zone))
+		return (clear_all(file) && str_error("Error: Operation file corrupted\n", 1));
+	paint_background(drawing, &zone);
+	if (!draw_shapes(file, drawing, &zone))
+		return (clear_all(file) && str_error("Error: Operation file corrupted\n", 1));
 	draw_drawing(drawing, &zone);
-	clear_all(file, NULL, drawing);
+	clear_all(file);
 	return (0);
 }
