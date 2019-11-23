@@ -39,13 +39,12 @@ do
 		if ! (( counter % 50 ))
 		then
 			printf "\e[1;34m[$counter]\e[0m"
+		fi
+		if [ $our_res -ne 0 ]
+		then
+			printf "\e[1;33m$our_res\e[0m"
 		else
-			if [ $our_res -ne 0 ]
-			then
-				printf "\e[1;33m$our_res\e[0m"
-			else
-				printf "\e[1;32m$our_res\e[0m"
-			fi
+			printf "\e[1;32m$our_res\e[0m"
 		fi
 	fi
 	((max++))

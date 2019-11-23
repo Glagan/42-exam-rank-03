@@ -6,7 +6,7 @@
 /*   By: ncolomer <ncolomer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 13:09:44 by ncolomer          #+#    #+#             */
-/*   Updated: 2019/11/22 19:17:56 by ncolomer         ###   ########.fr       */
+/*   Updated: 2019/11/23 16:10:17 by ncolomer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int
 	int		width, height, background;
 	int		i, nbr_shapes;
 	int		type, color;
-	double	x, y, swidth, sheight;
+	float	x, y, swidth, sheight;
 	int		size;
 
 	srand(time(NULL));
@@ -44,11 +44,11 @@ int
 		return (printf("file: fopen error.\n"));
 	width = rand_int_range(-1, 301);
 	height = rand_int_range(-1, 301);
-	background = rand_int_range((FULL_ASCII) ? 0 : 32, (FULL_ASCII) ? 255 : 126);
+	background = rand_int_range((FULL_ASCII) ? 1 : 32, (FULL_ASCII) ? 255 : 126);
 	if (fprintf(file, "%d %d %c\n", width, height, background) < 0)
 		return (fclose(file) && printf("file: fprintf error.\n"));
 
-	nbr_shapes = rand_int_range(-4, 42);
+	nbr_shapes = rand_int_range(-2, 42+42);
 	i = 0;
 	while (i < nbr_shapes)
 	{
@@ -59,13 +59,13 @@ int
 			type = 'r';
 		else
 			type = 'R';
-		color = rand_int_range((FULL_ASCII) ? 0 : 32, (FULL_ASCII) ? 255 : 126);
-		if ((size = rand_int_range(0, 100)) >= 50)
+		color = rand_int_range((FULL_ASCII) ? 1 : 32, (FULL_ASCII) ? 255 : 126);
+		if ((size = rand_int_range(0, 100)) >= 25)
 		{
-			x = rand_float_range(.0001, (double)size);
-			y = rand_float_range(.0001, (double)size);
-			swidth = rand_float_range(.0001, (double)size);
-			sheight = rand_float_range(.0001, (double)size);
+			x = rand_float_range(.001, (float)size);
+			y = rand_float_range(.001, (float)size);
+			swidth = rand_float_range(.001, (float)size);
+			sheight = rand_float_range(.001, (float)size);
 		}
 		else
 		{
