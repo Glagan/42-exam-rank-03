@@ -48,17 +48,6 @@ int
 	return (att);
 }
 
-/*int
-	ft_round(double val)
-{
-	int	att;
-
-	att = (int)val;
-	if (val - att >= 0.5)
-		return (ft_ceil(val));
-	return (att);
-}*/
-
 int
 	str_error(char const *str, int ret)
 {
@@ -112,7 +101,7 @@ int
 {
 	return (shape->width > 0 && shape->height > 0
 			&& (shape->type == 'r' || shape->type == 'R')
-			&& shape->color != ' ');
+			/*&& shape->color != ' '*/);
 }
 
 int
@@ -184,8 +173,8 @@ void
 	int	lim_x;
 	int	lim_y;
 
-	start_x = ft_ceil(shape->x);
-	start_y = ft_ceil(shape->y);
+	start_x = ft_floor(shape->x); //ft_ceil(shape->x);
+	start_y = ft_floor(shape->y); //ft_ceil(shape->y);
 	lim_x = ft_floor(shape->x + shape->width);
 	lim_y = ft_floor(shape->y + shape->height);
 	i = start_y;
@@ -196,8 +185,11 @@ void
 		{
 			if (i >= 0 && i < zone->height
 				&& j >= 0 && j < zone->width
-				&& (shape->type == 'R' || (i == start_y || i == lim_y
-					|| j == start_x || j == lim_x)))
+				&& (shape->type == 'R'
+					|| shape->y - shape->height < 1.00000000
+					|| (shape->y + shape->height) - (double)i < 1.00000000
+					|| shape->x - shape->width < 1.00000000
+					|| (shape->x + shape->width) - (double)j < 1.00000000)))
 				drawing[(i * zone->width) + j] = shape->color;
 			j++;
 		}
