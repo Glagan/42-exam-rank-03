@@ -53,7 +53,7 @@ int
 {
 	float	distance;
 
-	distance = sqrtf(powf(x - shape->x, 2.) + powf(y - shape->y, 2.));
+	distance = sqrtf((int)(powf(x - shape->x, 2.) + powf(y - shape->y, 2.)));
 	if (distance <= shape->radius)
 	{
 		if ((shape->radius - distance) < 1.00000000)

@@ -1,9 +1,9 @@
 #!/bin/bash
 echo "> start"
 echo "$ compile"
-rm -f micro_paint gen
-gcc -Wall -Wextra -Werror -lm micro_paint.c -o micro_paint
-gcc -Wall -Wextra -Werror -lm our_micro_paint.c -o _our_micro_paint
+rm -f mini_paint gen
+gcc -Wall -Wextra -Werror -lm mini_paint.c -o mini_paint
+gcc -Wall -Wextra -Werror -lm our_mini_paint.c -o _our_mini_paint
 g++ -Wall -Wextra -Werror generate_example.cpp -o gen
 echo "$ test"
 counter=1
@@ -16,9 +16,9 @@ do
 	if [ $? ]
 	then
 		sleep .01
-		./_our_micro_paint example_ > coutput 2>&1
+		./_our_mini_paint example_ > coutput 2>&1
 		our_res=$?
-		./micro_paint example_ > output 2>&1
+		./mini_paint example_ > output 2>&1
 		bad_res=$?
 		if [ $our_res -ne $bad_res ]
 		then
@@ -45,5 +45,5 @@ do
 	((max++))
 	((counter++))
 done
-rm -rf gen micro_paint example_ output coutput
+rm -rf gen mini_paint example_ output coutput
 printf "\n> done"
