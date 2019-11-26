@@ -18,7 +18,7 @@
 
 # define FULL_ASCII 0
 # define ASCII_RANGE (FULL_ASCII) ? 1 : 32, (FULL_ASCII) ? 255 : 126
-# define MODE "rR"
+# define MODE "cC"
 
 int
 	rand_int_range(int min, int max, std::mt19937 &rng)
@@ -39,7 +39,7 @@ int
 	int		width, height, background;
 	int		i, nbr_shapes;
 	int		type, color;
-	float	x, y, swidth, sheight;
+	float	x, y, sradius;
 	int		size;
 
 	std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
@@ -59,28 +59,26 @@ int
 		if (type == 10000 || type == 0)
 			type = 'a';
 		else if (type >= 5000)
-			type = 'r';
+			type = 'c';
 		else
-			type = 'R';
+			type = 'C';
 		color = rand_int_range(ASCII_RANGE, rng);
 		if ((size = rand_int_range(0, 100, rng)) >= 25)
 		{
 			x = rand_float_range(.001, (float)size, rng);
 			y = rand_float_range(.001, (float)size, rng);
-			swidth = rand_float_range(.001, (float)size, rng);
-			sheight = rand_float_range(.001, (float)size, rng);
+			sradius = rand_float_range(.001, (float)size, rng);
 		}
 		else
 		{
 			x = rand_float_range(-100., 400., rng);
 			y = rand_float_range(-100., 400., rng);
-			swidth = rand_float_range(-.90, 400., rng);
-			sheight = rand_float_range(-.90, 400., rng);
+			sradius = rand_float_range(-.90, 400., rng);
 		}
 		if (rand_int_range(0, 100, rng) >= 35)
-			size = fprintf(file, (++i == nbr_shapes) ? "%c %f %f %f %f %c" : "%c %f %f %f %f %c\n", type, x, y, swidth, sheight, color);
+			size = fprintf(file, (++i == nbr_shapes) ? "%c %f %f %f %c" : "%c %f %f %f %c\n", type, x, y, sradius, color);
 		else
-			size = fprintf(file, (++i == nbr_shapes) ? "%c %d %d %d %d %c" : "%c %d %d %d %d %c\n", type, (int)x, (int)y, (int)swidth, (int)sheight, color);
+			size = fprintf(file, (++i == nbr_shapes) ? "%c %d %d %d %c" : "%c %d %d %d %c\n", type, (int)x, (int)y, (int)sradius, color);
 		if (size < 0)
 			return (fclose(file) && printf("file: fprintf error.\n"));
 	}
