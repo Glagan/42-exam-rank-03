@@ -14,6 +14,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <random>
+#include <chrono>
 
 # define FULL_ASCII 0
 # define ASCII_RANGE (FULL_ASCII) ? 1 : 32, (FULL_ASCII) ? 255 : 126
@@ -50,7 +51,7 @@ int
 	if (fprintf(file, "%d %d %c\n", width, height, background) < 0)
 		return (fclose(file) && printf("file: fprintf error.\n"));
 
-	nbr_shapes = rand_int_range(-2, 42+42, rng);
+	nbr_shapes = rand_int_range(-2, 42, rng);
 	i = 0;
 	while (i < nbr_shapes)
 	{

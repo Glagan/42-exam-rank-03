@@ -3,6 +3,7 @@ echo "> start"
 echo "$ compile"
 rm -f micro_paint gen
 gcc -Wall -Wextra -Werror micro_paint.c -o micro_paint
+gcc -Wall -Wextra -Werror our_micro_paint.c -o _our_micro_paint
 g++ -Wall -Wextra -Werror generate_example.cpp -o gen
 echo "$ test"
 counter=1
@@ -15,7 +16,7 @@ do
 	if [ $? ]
 	then
 		sleep .01
-		./our_micro_paint example_ > coutput 2>&1
+		./_our_micro_paint example_ > coutput 2>&1
 		grep "Operation file corrupted" coutput >/dev/null 2>&1
 		if [ $? -eq 0 ]
 		then
@@ -27,7 +28,7 @@ do
 		bad_res=$?
 		if [ $our_res -ne $bad_res ]
 		then
-			printf "\n: different return result, our \e[1;31m$our_res\e[0m and yours \e[1;32m$bad_res\e[0m !"
+			printf "\n: different return result, our \e[1;31m$our_res\e[0m and yours \e[1;32m$bad_res\e[0m !\n"
 			exit 1
 		fi
 		diff -y --suppress-common-lines coutput output
