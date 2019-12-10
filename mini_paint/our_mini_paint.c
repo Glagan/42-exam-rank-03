@@ -61,14 +61,14 @@ float square(float a)
 	return (a * a);
 }
 
-int sq_dist(float x1, float y1, float x2, float y2)
+float sq_dist(float x1, float y1, float x2, float y2)
 {
 	float dist_x;
 	float dist_y;
 
 	dist_x = square(x1 - x2);
 	dist_y = square(y1 - y2);
-	return (int)(dist_x + dist_y);
+	return (dist_x + dist_y);
 }
 
 int is_in_circle(float x, float y, circle *circle)
@@ -76,7 +76,7 @@ int is_in_circle(float x, float y, circle *circle)
 	float	distance;
 	float	distance_sqrt;
 
-	distance_sqrt = sqrtf((float)sq_dist(x, y, circle->x, circle->y));
+	distance_sqrt = sqrtf(sq_dist(x, y, circle->x, circle->y));
 	distance = distance_sqrt - circle->radius;
 	if (distance <= 0.00000000)
 	{

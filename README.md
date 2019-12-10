@@ -1,5 +1,7 @@
 # Exam Rank 03
 
+>Binaries are **outdated**, compile ``our_[mini|micro]_paint.c`` and use that as a reference.
+
 ## Tests
 
 Your code should be in a single file ``micro_paint.c`` (or ``mini_paint.c``).  
