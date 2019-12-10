@@ -4,7 +4,7 @@
 
 typedef struct drawing drawing, *Pdrawing;
 
-struct drawing { // Represent the width, height and matrice of pixels
+struct drawing {
     int width;
     int height;
     char * matrice;
@@ -12,7 +12,7 @@ struct drawing { // Represent the width, height and matrice of pixels
 
 typedef struct rectangle rectangle, *Prectangle;
 
-struct rectangle { // A rectangle
+struct rectangle {
     char type;
     float x;
     float y;
