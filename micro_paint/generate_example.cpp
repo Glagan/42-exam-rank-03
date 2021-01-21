@@ -38,6 +38,7 @@ int main(void)
 	int type, color;
 	float x, y, swidth, sheight;
 	int size;
+	char spaces[7][5];
 
 	std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
 	if (!(file = fopen("example_", "w")))
@@ -84,11 +85,35 @@ int main(void)
 				sheight = rand_float_range(-.90, 400., rng);
 			}
 
+			// Generate spaces between parameters
+			for (size_t j = 0; j < 6; j++)
+			{
+				if (rand_int_range(0, 100, rng) >= 75)
+				{
+					int count = rand_int_range(1, 5, rng);
+					int k = 0;
+					for (; k < count; k++)
+					{
+						spaces[j][k] = ' ';
+					}
+					spaces[j][k] = 0;
+				}
+				else if (j == 0 || j == 5)
+				{
+					spaces[j][0] = 0;
+				}
+				else
+				{
+					spaces[j][0] = ' ';
+					spaces[j][1] = 0;
+				}
+			}
+
 			// Print to file, 65% float values, 35% rounded to int
 			if (rand_int_range(0, 100, rng) >= 35)
-				size = fprintf(file, "%c %f %f %f %f %c", type, x, y, swidth, sheight, color);
+				size = fprintf(file, "%s%c%s%f%s%f%s%f%s%f%s%c%s", spaces[0], type, spaces[1], x, spaces[2], y, spaces[3], swidth, spaces[4], sheight, spaces[5], color, spaces[6]);
 			else
-				size = fprintf(file, "%c %d %d %d %d %c", type, (int)x, (int)y, (int)swidth, (int)sheight, color);
+				size = fprintf(file, "%s%c%s%d%s%d%s%d%s%d%s%c%s", spaces[0], type, spaces[1], (int)x, spaces[2], (int)y, spaces[3], (int)swidth, spaces[4], (int)sheight, spaces[5], color, spaces[6]);
 			if (i < nbr_lines && size)
 				size = fprintf(file, "\n");
 		}
