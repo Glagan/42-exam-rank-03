@@ -1,8 +1,8 @@
-our_micro_paint
-micro_paint
-our_mini_paint
-mini_paint
-gen*
+_our_micro_paint*
+_micro_paint*
+_our_mini_paint*
+_mini_paint*
+_gen*
 example_*
 output
 coutput
