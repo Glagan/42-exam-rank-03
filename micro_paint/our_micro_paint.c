@@ -4,21 +4,23 @@
 
 typedef struct drawing drawing, *Pdrawing;
 
-struct drawing {
-    int width;
-    int height;
-    char * matrice;
+struct drawing
+{
+	int width;
+	int height;
+	char *matrice;
 };
 
 typedef struct rectangle rectangle, *Prectangle;
 
-struct rectangle {
-    char type;
-    float x;
-    float y;
-    float width;
-    float height;
-    char color;
+struct rectangle
+{
+	char type;
+	float x;
+	float y;
+	float width;
+	float height;
+	char color;
 };
 
 int ft_strlen(char *str)
@@ -33,9 +35,9 @@ int ft_strlen(char *str)
 
 int get_info(FILE *file, drawing *drawing)
 {
-	char 	*tmp;
-	int 	i;
-	char	background;
+	char *tmp;
+	int i;
+	char background;
 
 	if (fscanf(file, "%d %d %c\n", &drawing->width, &drawing->height, &background) == 3)
 	{
@@ -60,7 +62,7 @@ int is_in_rectangle(float x, float y, rectangle *rectangle)
 	if (((x - rectangle->x < 1.00000000) || ((rectangle->x + rectangle->width) - x < 1.00000000)) ||
 		((y - rectangle->y < 1.00000000 || ((rectangle->y + rectangle->height) - y < 1.00000000))))
 		return (2); // Border
-	return (1); // Inside
+	return (1);		// Inside
 }
 
 void execute_one(rectangle *rect, drawing *drawing, int x, int y)
@@ -73,7 +75,7 @@ void execute_one(rectangle *rect, drawing *drawing, int x, int y)
 	return;
 }
 
-int apply_op(rectangle *rect,drawing *drawing)
+int apply_op(rectangle *rect, drawing *drawing)
 {
 	int j;
 	int i;
@@ -102,18 +104,18 @@ void print_info(drawing *zone)
 
 int execute(FILE *file)
 {
-	int 		scan_ret;
-	rectangle	rect;
-	drawing		drawing;
+	int scan_ret;
+	rectangle rect;
+	drawing drawing;
 
 	if (!get_info(file, &drawing))
 	{
-		scan_ret = fscanf(file,"%c %f %f %f %f %c\n", &rect.type, &rect.x, &rect.y, &rect.width, &rect.height, &rect.color);
+		scan_ret = fscanf(file, "%c %f %f %f %f %c\n", &rect.type, &rect.x, &rect.y, &rect.width, &rect.height, &rect.color);
 		while (scan_ret == 6)
 		{
 			if (apply_op(&rect, &drawing))
 				return (1);
-			scan_ret = fscanf(file,"%c %f %f %f %f %c\n", &rect.type, &rect.x, &rect.y, &rect.width, &rect.height, &rect.color);
+			scan_ret = fscanf(file, "%c %f %f %f %f %c\n", &rect.type, &rect.x, &rect.y, &rect.width, &rect.height, &rect.color);
 		}
 		if (scan_ret == -1)
 		{
@@ -126,12 +128,12 @@ int execute(FILE *file)
 
 int main(int argc, char **argv)
 {
-	int  	i;
-	FILE	*file;
+	int i;
+	FILE *file;
 
 	if (argc == 2)
 	{
-		file = fopen(argv[1],"r");
+		file = fopen(argv[1], "r");
 		if (file && !execute(file))
 			return 0;
 		i = ft_strlen("Error: Operation file corrupted\n");

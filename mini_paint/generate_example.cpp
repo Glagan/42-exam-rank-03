@@ -15,70 +15,88 @@
 #include <stdlib.h>
 #include <random>
 #include <chrono>
+#include <cmath>
 
-# define FULL_ASCII 0
-# define ASCII_RANGE (FULL_ASCII) ? 1 : 32, (FULL_ASCII) ? 255 : 126
-# define MODE "cC"
+#define FULL_ASCII 0
+#define ASCII_RANGE (FULL_ASCII) ? 1 : 32, (FULL_ASCII) ? 255 : 126
+#define MODE "cC"
 
-int
-	rand_int_range(int min, int max, std::mt19937 &rng)
+int rand_int_range(int min, int max, std::mt19937 &rng)
 {
 	return (std::uniform_int_distribution<int>(min, max)(rng));
 }
 
-float
-	rand_float_range(float min, float max, std::mt19937 &rng)
+float rand_float_range(float min, float max, std::mt19937 &rng)
 {
-    return (std::uniform_real_distribution<float>(min, max)(rng));
+	return (std::uniform_real_distribution<float>(min, max)(rng));
 }
 
-int
-	main(void)
+int main(void)
 {
-	FILE*	file;
-	int		width, height, background;
-	int		i, nbr_shapes;
-	int		type, color;
-	float	x, y, sradius;
-	int		size;
+	FILE *file;
+	int width, height, background;
+	int i, nbr_lines;
+	int type, color;
+	float x, y, sradius;
+	int size;
 
 	std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
 	if (!(file = fopen("example_", "w")))
 		return (printf("file: fopen error.\n"));
+
+	// Parameters
 	width = rand_int_range(-1, 301, rng);
 	height = rand_int_range(-1, 301, rng);
 	background = rand_int_range(ASCII_RANGE, rng);
 	if (fprintf(file, "%d %d %c\n", width, height, background) < 0)
 		return (fclose(file) && printf("file: fprintf error.\n"));
 
-	nbr_shapes = rand_int_range(-2, 42, rng);
+	// Generate each lines
+	nbr_lines = rand_int_range(-2, 42, rng);
 	i = 0;
-	while (i < nbr_shapes)
+	while (i++ < nbr_lines)
 	{
-		type = rand_int_range(0, 10000, rng);
-		if (type == 10000 || type == 0)
-			type = 'a';
-		else if (type >= 5000)
-			type = 'c';
-		else
-			type = 'C';
-		color = rand_int_range(ASCII_RANGE, rng);
-		if ((size = rand_int_range(0, 100, rng)) >= 25)
+		// 10% empty lines, normal line otherwise
+		if (rand_int_range(0, 100, rng) < 90)
 		{
-			x = rand_float_range(.001, (float)size, rng);
-			y = rand_float_range(.001, (float)size, rng);
-			sradius = rand_float_range(.001, (float)size, rng);
+			// Shape type, 49.5% for each, 1% errors
+			type = rand_int_range(0, 10000, rng);
+			if (type >= 9900)
+				type = 'a';
+			else if (type >= 4950)
+				type = 'c';
+			else
+				type = 'C';
+			color = rand_int_range(ASCII_RANGE, rng);
+
+			// Size, 75% above 0, 25% negative
+			if ((size = rand_int_range(0, 100, rng)) >= 25)
+			{
+				x = rand_float_range(.001, (float)size, rng);
+				y = rand_float_range(.001, (float)size, rng);
+				sradius = rand_float_range(.001, (float)size, rng);
+			}
+			else
+			{
+				x = rand_float_range(-100., 400., rng);
+				y = rand_float_range(-100., 400., rng);
+				sradius = rand_float_range(-.90, 400., rng);
+			}
+
+			// Print to file, 65% float values, 35% rounded to int
+			if (rand_int_range(0, 100, rng) >= 35)
+				size = fprintf(file, "%c %f %f %f %c", type, x, y, sradius, color);
+			else
+				size = fprintf(file, "%c %d %d %d %c", type, (int)x, (int)y, (int)sradius, color);
+			if (i < nbr_lines && size)
+				size = fprintf(file, "\n");
 		}
 		else
 		{
-			x = rand_float_range(-100., 400., rng);
-			y = rand_float_range(-100., 400., rng);
-			sradius = rand_float_range(-.90, 400., rng);
+			size = fprintf(file, "\n");
+			nbr_lines++;
 		}
-		if (rand_int_range(0, 100, rng) >= 35)
-			size = fprintf(file, (++i == nbr_shapes) ? "%c %f %f %f %c" : "%c %f %f %f %c\n", type, x, y, sradius, color);
-		else
-			size = fprintf(file, (++i == nbr_shapes) ? "%c %d %d %d %c" : "%c %d %d %d %c\n", type, (int)x, (int)y, (int)sradius, color);
+
 		if (size < 0)
 			return (fclose(file) && printf("file: fprintf error.\n"));
 	}
