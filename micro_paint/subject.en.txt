@@ -22,7 +22,7 @@ If an error has occured your program must return 1
 If no error has occured it must return 0
 The last line can be with or without a \n
 The lines must be read in order and therefore operations must be executed in the same order
-There must be one space between each variable in a line
+There must be at least one space between each variable in a line
 
 WIDTH HEIGHT BACKGROUND_CHAR
 This line is always the first line of the file and it defines the zone where to draw. Your program should not display anything outside the draw zone. It must be there only once.
