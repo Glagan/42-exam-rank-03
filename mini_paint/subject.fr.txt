@@ -20,9 +20,9 @@ Le "fichier d'operation" sera composé d'une opération par ligne
 Si une ligne n'est pas correct, alors c'est qu'un probleme vient d'avoir lieu
 Si votre programme à un probleme il doit renvoyer 1
 Si votre programme n'a pas rencontré de probleme, il doit renvoyer 0
-La derniere ligne du fichier ne sera pas forcement terminer par un \n
-Les lignes doivent etre lu dans l'ordre et par consequent les operations doivent etre executer dans le meme ordre
-Il doit n'y avoir qu'un espace entre chaque variable d'une ligne
+La derniere ligne du fichier ne sera pas forcement terminée par un \n
+Les lignes doivent etre lu dans l'ordre et par consequent les operations doivent etre executées dans le meme ordre
+Il doit y avoir au moins un espace entre chaque variable d'une ligne
 
 WIDTH HEIGHT BACKGROUND_CHAR
 Cette ligne sera toujours la premiere ligne du fichier et elle definie la zone dites "de dessin". Votre programme ne devrait rien afficher en dehors de cette "zone de dessin". Cette ligne ne sera presente qu une fois.
