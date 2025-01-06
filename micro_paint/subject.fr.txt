@@ -44,8 +44,8 @@ Cette operation fera dessiné un rectangle plein
 - R: le caractère R
 - X: un float, la position horizontale du coin en haut a gauche du rectangle
 - Y: un float, la position verticale du coin en haut a gauche du rectangle
-- WIDTH: un float positif different de 0, la largeur du cercle (horizontale)
-- HEIGHT: un float positif different de 0, la hauteur du cercle (verticale)
+- WIDTH: un float positif different de 0, la largeur du rectangle (horizontale)
+- HEIGHT: un float positif different de 0, la hauteur du rectangle (verticale)
 - CHAR: un char, le caractère utilisé pour dessiner le rectangle
 
 La "zone de dessin" est divisé en rectangle qui peuvent chacun contenir un seul caractère (c'est parce qu'on est dans un terminal...) nous les appelerons pixel
